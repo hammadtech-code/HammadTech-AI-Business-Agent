@@ -1,4 +1,4 @@
-'use client';
+          'use client';
 
 import { useState } from 'react';
 
@@ -12,7 +12,6 @@ export default function HammadTechAIAgent() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Live Project Snapshot & Lead Intelligence State
   const [projectSnapshot, setProjectSnapshot] = useState({
     intent: 'GENERAL_INQUIRY',
     detectedService: 'Pending Analysis',
@@ -36,7 +35,6 @@ export default function HammadTechAIAgent() {
     setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
     setLoading(true);
 
-    // Simulated Smart Intent & Requirement Processing
     setTimeout(() => {
       let detectedService = projectSnapshot.detectedService;
       let intent = 'PROJECT_REQUEST';
@@ -72,7 +70,6 @@ export default function HammadTechAIAgent() {
   return (
     <main style={{ minHeight: '100vh', backgroundColor: '#090d16', color: '#f1f5f9', fontFamily: 'system-ui, sans-serif', display: 'flex', flexDirection: 'column' }}>
       
-      {/* Top Header */}
       <header style={{ borderBottom: '1px solid #1e293b', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#0d1322' }}>
         <div>
           <h1 style={{ fontSize: '1.15rem', fontWeight: '800', margin: '0', color: '#ffffff', letterSpacing: '0.5px' }}>
@@ -86,13 +83,10 @@ export default function HammadTechAIAgent() {
         </div>
       </header>
 
-      {/* Main Workspace Layout */}
       <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 320px', gap: '0', overflow: 'hidden' }}>
         
-        {/* Left Area: Chat Container */}
         <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 73px)', borderRight: '1px solid #1e293b' }}>
           
-          {/* Chat Messages */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {messages.map((msg, index) => (
               <div key={index} style={{ 
@@ -114,20 +108,18 @@ export default function HammadTechAIAgent() {
             {loading && <div style={{ color: '#64748b', fontStyle: 'italic', fontSize: '0.85rem', paddingLeft: '8px' }}>Analyzing requirements & mapping services...</div>}
           </div>
 
-          {/* Quick Prompt Chips */}
           <div style={{ padding: '0 24px 12px 24px', display: 'flex', gap: '8px', overflowX: 'auto' }}>
             {quickPrompts.map((prompt, idx) => (
               <button 
                 key={idx} 
                 onClick={() => handleSendMessage(prompt)}
-                style={{ backgroundColor: '#111827', border: '1px solid #334155', color: '#cbd5e1', padding: '6px 12px', borderRadius: '16px', fontSize: '0.8rem', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all 0.2s' }}
+                style={{ backgroundColor: '#111827', border: '1px solid #334155', color: '#cbd5e1', padding: '6px 12px', borderRadius: '16px', fontSize: '0.8rem', cursor: 'pointer', whiteSpace: 'nowrap' }}
               >
                 {prompt}
               </button>
             ))}
           </div>
 
-          {/* Input Form */}
           <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} style={{ display: 'flex', gap: '12px', padding: '16px 24px', borderTop: '1px solid #1e293b', backgroundColor: '#0d1322' }}>
             <input
               type="text"
@@ -143,7 +135,6 @@ export default function HammadTechAIAgent() {
 
         </div>
 
-        {/* Right Area: Live Project Snapshot & Lead Intelligence */}
         <div style={{ backgroundColor: '#0d1322', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
           <div>
             <h3 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#38bdf8', letterSpacing: '1px', margin: '0 0 4px 0' }}>Live Project Snapshot</h3>
@@ -186,5 +177,4 @@ export default function HammadTechAIAgent() {
       </div>
     </main>
   );
-               }
-        
+}
