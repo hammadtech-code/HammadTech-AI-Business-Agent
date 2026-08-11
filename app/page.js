@@ -1,179 +1,184 @@
-          'use client';
+'use client';
 
 import { useState } from 'react';
 
-export default function HammadTechAIAgent() {
+export default function HammadTechAgent() {
+  const [pin, setPin] = useState('');
+  const [isLocked, setIsLocked] = useState(true);
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [messages, setMessages] = useState([
-    { 
-      role: 'assistant', 
-      content: 'Assalam-o-Alaikum! Welcome to HammadTech AI Business Agent. How can we accelerate your business with AI, software, or automation today?' 
-    }
+    { sender: 'agent', text: 'HammadTech Master Agent online and fully operational. Ready for deployment.' }
   ]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [inputMessage, setInputMessage] = useState('');
 
-  const [projectSnapshot, setProjectSnapshot] = useState({
-    intent: 'GENERAL_INQUIRY',
-    detectedService: 'Pending Analysis',
-    leadStatus: 'WARM',
-    leadScore: 50,
+  const [profile, setProfile] = useState({
+    name: 'Hammad Allah Bakhsh',
+    handle: '@hammadtech55',
+    role: 'Lead Architect & Founder',
+    email: 'hammad@hammadtech.com',
+    avatar: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
   });
 
-  const quickPrompts = [
-    "I need an AI Agent / Receptionist",
-    "I need a Full-Stack Web App",
-    "I need Architectural Visualization",
-    "I want business automation"
-  ];
-
-  const handleSendMessage = async (textToSend) => {
-    const text = textToSend || input;
-    if (!text.trim()) return;
-
-    const userMessage = text;
-    setInput('');
-    setMessages((prev) => [...prev, { role: 'user', content: userMessage }]);
-    setLoading(true);
-
-    setTimeout(() => {
-      let detectedService = projectSnapshot.detectedService;
-      let intent = 'PROJECT_REQUEST';
-      let leadScore = projectSnapshot.leadScore + 15;
-
-      const lower = userMessage.toLowerCase();
-      if (lower.includes('ai') || lower.includes('agent') || lower.includes('bot')) {
-        detectedService = 'AI Agent & Automation';
-      } else if (lower.includes('web') || lower.includes('site') || lower.includes('app')) {
-        detectedService = 'Full-Stack Software Development';
-      } else if (lower.includes('arch') || lower.includes('visual') || lower.includes('3d')) {
-        detectedService = 'Architectural Visualization';
-      }
-
-      setProjectSnapshot({
-        intent,
-        detectedService,
-        leadStatus: leadScore > 70 ? 'HOT LEAD 🔥' : 'WARM',
-        leadScore: Math.min(leadScore, 95),
-      });
-
-      setMessages((prev) => [
-        ...prev,
-        { 
-          role: 'assistant', 
-          content: `Great choice! Based on your requirement for **${detectedService}**, HammadTech can build a custom, high-performance solution for you. Would you like to outline your core features or schedule a technical review?` 
-        }
-      ]);
-      setLoading(false);
-    }, 1000);
+  const handleUnlock = () => {
+    if (pin === '1234') {
+      setIsLocked(false);
+      setPin('');
+    } else {
+      alert('Invalid Security PIN Code! Use 1234');
+    }
   };
 
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+    const userText = inputMessage;
+    setInputMessage('');
+    setMessages(prev => [...prev, { sender: 'user', text: userText }]);
+    
+    setTimeout(() => {
+      setMessages(prev => [...prev, { 
+        sender: 'agent', 
+        text: `Executing autonomous sequence for: "${userText}". All systems optimal under HammadTech protocol.` 
+      }]);
+    }, 600);
+  };
+
+  if (isLocked) {
+    return (
+      <main style={{ minHeight: '100vh', backgroundColor: '#090d16', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', fontFamily: 'sans-serif' }}>
+        <div style={{ backgroundColor: '#111827', border: '1px solid #374155', padding: '30px', borderRadius: '12px', width: '100%', maxWidth: '380px', textAlign: 'center' }}>
+          <h2 style={{ color: '#38bdf8', marginBottom: '10px' }}>🔐 SECURE VAULT</h2>
+          <p style={{ fontSize: '0.85rem', color: '#9ca3af', marginBottom: '20px' }}>HammadTech Autonomous Agent Terminal</p>
+          <input 
+            type="password" 
+            maxLength="4"
+            value={pin} 
+            onChange={(e) => setPin(e.target.value)} 
+            placeholder="ENTER 4-DIGIT PIN (1234)" 
+            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #374155', backgroundColor: '#030712', color: '#fff', textAlign: 'center', fontSize: '18px', letterSpacing: '6px', marginBottom: '15px', outline: 'none' }} 
+          />
+          <button 
+            onClick={handleUnlock}
+            style={{ width: '100%', backgroundColor: '#2563eb', color: '#fff', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+          >
+            AUTHORIZE & UNLOCK
+          </button>
+          <span style={{ display: 'block', marginTop: '15px', fontSize: '0.75rem', color: '#6b7280' }}>Default PIN: 1234</span>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: '#090d16', color: '#f1f5f9', fontFamily: 'system-ui, sans-serif', display: 'flex', flexDirection: 'column' }}>
-      
-      <header style={{ borderBottom: '1px solid #1e293b', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#0d1322' }}>
+    <main style={{ minHeight: '100vh', backgroundColor: '#090d16', color: '#f8fafc', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column' }}>
+      <header style={{ backgroundColor: '#0d1322', borderBottom: '1px solid #1e293b', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '1.15rem', fontWeight: '800', margin: '0', color: '#ffffff', letterSpacing: '0.5px' }}>
-            HammadTech <span style={{ color: '#38bdf8', fontWeight: '400' }}>AI Business Agent</span>
-          </h1>
-          <p style={{ fontSize: '0.75rem', color: '#64748b', margin: '2px 0 0 0' }}>@hammadtech55 | Global AI & Software Solutions</p>
+          <h1 style={{ fontSize: '1.2rem', margin: '0', fontWeight: 'bold' }}>HammadTech <span style={{ color: '#38bdf8' }}>Core</span></h1>
+          <p style={{ fontSize: '0.75rem', color: '#64748b', margin: '2px 0 0 0' }}>Founder: {profile.name} ({profile.handle})</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', backgroundColor: '#052e16', color: '#4ade80', padding: '6px 12px', borderRadius: '20px', border: '1px solid #14532d', fontWeight: '600' }}>
-          <span style={{ width: '8px', height: '8px', backgroundColor: '#4ade80', borderRadius: '50%', display: 'inline-block' }}></span>
-          System Online
-        </div>
+        <button 
+          onClick={() => setIsLocked(true)}
+          style={{ backgroundColor: '#7f1d1d', color: '#fca5a5', border: '1px solid #991b1b', padding: '6px 12px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 'bold', cursor: 'pointer' }}
+        >
+          Lock Workstation
+        </button>
       </header>
 
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 320px', gap: '0', overflow: 'hidden' }}>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 73px)', borderRight: '1px solid #1e293b' }}>
-          
-          <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {messages.map((msg, index) => (
-              <div key={index} style={{ 
-                alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', 
-                maxWidth: '80%', 
-                backgroundColor: msg.role === 'user' ? '#1e293b' : '#111827', 
-                border: '1px solid #334155', 
-                padding: '14px 18px', 
-                borderRadius: '12px', 
-                fontSize: '0.95rem', 
-                lineHeight: '1.5' 
-              }}>
-                <strong style={{ display: 'block', fontSize: '0.7rem', color: '#94a3b8', marginBottom: '4px', textTransform: 'uppercase' }}>
-                  {msg.role === 'user' ? 'You' : 'HammadTech AI'}
-                </strong>
-                <span dangerouslySetInnerHTML={{ __html: msg.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+      <nav style={{ display: 'flex', backgroundColor: '#0f172a', borderBottom: '1px solid #1e293b', padding: '0 24px', gap: '8px' }}>
+        {['dashboard', 'agent', 'profile', 'security'].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            style={{
+              padding: '12px 16px',
+              backgroundColor: activeTab === tab ? '#1e293b' : 'transparent',
+              color: activeTab === tab ? '#38bdf8' : '#94a3b8',
+              border: 'none',
+              borderBottom: activeTab === tab ? '2px solid #38bdf8' : '2px solid transparent',
+              cursor: 'pointer',
+              fontSize: '0.85rem',
+              fontWeight: '600',
+              textTransform: 'capitalize'
+            }}
+          >
+            {tab === 'dashboard' ? '📊 Executive Dashboard' : tab === 'agent' ? '🤖 Agent Terminal' : tab === 'profile' ? '👤 Profile Settings' : '🔒 Security Vault'}
+          </button>
+        ))}
+      </nav>
+
+      <div style={{ flex: 1, padding: '24px', maxWidth: '1000px', width: '100%', margin: '0 auto' }}>
+        {activeTab === 'dashboard' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            <div style={{ backgroundColor: '#111827', border: '1px solid #1e293b', padding: '20px', borderRadius: '10px' }}>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Active Executions</span>
+              <h3 style={{ fontSize: '1.8rem', margin: '8px 0 0 0', color: '#38bdf8' }}>1,284</h3>
+            </div>
+            <div style={{ backgroundColor: '#111827', border: '1px solid #1e293b', padding: '20px', borderRadius: '10px' }}>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>System Efficiency</span>
+              <h3 style={{ fontSize: '1.8rem', margin: '8px 0 0 0', color: '#4ade80' }}>99.8%</h3>
+            </div>
+            <div style={{ backgroundColor: '#111827', border: '1px solid #1e293b', padding: '20px', borderRadius: '10px' }}>
+              <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Security Level</span>
+              <h3 style={{ fontSize: '1.8rem', margin: '8px 0 0 0', color: '#f59e0b' }}>Maximum</h3>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'agent' && (
+          <div style={{ backgroundColor: '#111827', border: '1px solid #1e293b', borderRadius: '10px', display: 'flex', flexDirection: 'column', height: '65vh' }}>
+            <div style={{ padding: '16px', borderBottom: '1px solid #1e293b', fontWeight: 'bold', fontSize: '0.9rem' }}>Autonomous Agent Terminal</div>
+            <div style={{ flex: 1, padding: '16px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {messages.map((msg, idx) => (
+                <div key={idx} style={{ alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '75%', backgroundColor: msg.sender === 'user' ? '#1e293b' : '#030712', border: '1px solid #334155', padding: '10px 14px', borderRadius: '8px', fontSize: '0.9rem' }}>
+                  <span style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginBottom: '2px' }}>{msg.sender === 'user' ? 'Hammad' : 'Agent'}</span>
+                  {msg.text}
+                </div>
+              ))}
+            </div>
+            <div style={{ padding: '12px', borderTop: '1px solid #1e293b', display: 'flex', gap: '8px' }}>
+              <input 
+                type="text" 
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Enter command or query for agent..." 
+                style={{ flex: 1, padding: '10px', borderRadius: '6px', border: '1px solid #334155', backgroundColor: '#030712', color: '#fff', outline: 'none', fontSize: '0.9rem' }} 
+              />
+              <button onClick={handleSendMessage} style={{ backgroundColor: '#2563eb', color: '#fff', border: 'none', padding: '0 16px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>Send</button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'profile' && (
+          <div style={{ backgroundColor: '#111827', border: '1px solid #1e293b', padding: '24px', borderRadius: '10px', maxWidth: '500px' }}>
+            <h3 style={{ marginTop: '0', fontSize: '1rem', color: '#38bdf8' }}>Profile Configuration</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '16px' }}>
+              <div>
+                <label style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Full Name</label>
+                <input type="text" value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #334155', backgroundColor: '#030712', color: '#fff', outline: 'none' }} />
               </div>
-            ))}
-            {loading && <div style={{ color: '#64748b', fontStyle: 'italic', fontSize: '0.85rem', paddingLeft: '8px' }}>Analyzing requirements & mapping services...</div>}
-          </div>
-
-          <div style={{ padding: '0 24px 12px 24px', display: 'flex', gap: '8px', overflowX: 'auto' }}>
-            {quickPrompts.map((prompt, idx) => (
-              <button 
-                key={idx} 
-                onClick={() => handleSendMessage(prompt)}
-                style={{ backgroundColor: '#111827', border: '1px solid #334155', color: '#cbd5e1', padding: '6px 12px', borderRadius: '16px', fontSize: '0.8rem', cursor: 'pointer', whiteSpace: 'nowrap' }}
-              >
-                {prompt}
-              </button>
-            ))}
-          </div>
-
-          <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} style={{ display: 'flex', gap: '12px', padding: '16px 24px', borderTop: '1px solid #1e293b', backgroundColor: '#0d1322' }}>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Describe your project or ask a question..."
-              style={{ flex: 1, backgroundColor: '#020617', border: '1px solid #334155', borderRadius: '8px', padding: '14px', color: '#fff', outline: 'none', fontSize: '0.95rem' }}
-            />
-            <button type="submit" style={{ backgroundColor: '#2563eb', color: '#ffffff', border: 'none', borderRadius: '8px', padding: '0 24px', fontWeight: '600', cursor: 'pointer' }}>
-              Send
-            </button>
-          </form>
-
-        </div>
-
-        <div style={{ backgroundColor: '#0d1322', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', overflowY: 'auto' }}>
-          <div>
-            <h3 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: '#38bdf8', letterSpacing: '1px', margin: '0 0 4px 0' }}>Live Project Snapshot</h3>
-            <p style={{ fontSize: '0.75rem', color: '#64748b', margin: '0' }}>Real-time requirement assembly</p>
-          </div>
-
-          <div style={{ backgroundColor: '#111827', border: '1px solid #1e293b', borderRadius: '10px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', display: 'block' }}>DETECTED SERVICE</span>
-              <strong style={{ fontSize: '0.9rem', color: '#f8fafc' }}>{projectSnapshot.detectedService}</strong>
-            </div>
-            <div>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', display: 'block' }}>CURRENT INTENT</span>
-              <span style={{ fontSize: '0.85rem', color: '#38bdf8', fontWeight: '600' }}>{projectSnapshot.intent}</span>
-            </div>
-            <div>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', display: 'block' }}>QUALIFICATION STATUS</span>
-              <span style={{ fontSize: '0.85rem', color: '#4ade80', fontWeight: '700' }}>{projectSnapshot.leadStatus}</span>
-            </div>
-            <div>
-              <span style={{ fontSize: '0.7rem', color: '#64748b', display: 'block' }}>INTERNAL LEAD SIGNAL</span>
-              <div style={{ width: '100%', backgroundColor: '#1e293b', height: '6px', borderRadius: '3px', marginTop: '4px', overflow: 'hidden' }}>
-                <div style={{ width: `${projectSnapshot.leadScore}%`, backgroundColor: '#3b82f6', height: '100%' }}></div>
+              <div>
+                <label style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Handle</label>
+                <input type="text" value={profile.handle} onChange={(e) => setProfile({...profile, handle: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #334155', backgroundColor: '#030712', color: '#fff', outline: 'none' }} />
               </div>
+              <div>
+                <label style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Role</label>
+                <input type="text" value={profile.role} onChange={(e) => setProfile({...profile, role: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #334155', backgroundColor: '#030712', color: '#fff', outline: 'none' }} />
+              </div>
+              <button onClick={() => alert('Profile updated successfully!')} style={{ backgroundColor: '#16a34a', color: '#fff', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px' }}>Save Changes</button>
             </div>
           </div>
+        )}
 
-          <div style={{ backgroundColor: '#111827', border: '1px solid #1e293b', borderRadius: '10px', padding: '16px' }}>
-            <h4 style={{ fontSize: '0.8rem', color: '#e2e8f0', margin: '0 0 8px 0' }}>Ready to take action?</h4>
-            <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: '0 0 12px 0', lineHeight: '1.4' }}>Once your project details are aligned, connect directly with HammadTech team.</p>
-            <button 
-              onClick={() => alert('Handoff request initialized. Hammad will review your project snapshot shortly!')}
-              style={{ width: '100%', backgroundColor: '#1e293b', border: '1px solid #334155', color: '#ffffff', padding: '10px', borderRadius: '6px', fontWeight: '600', fontSize: '0.85rem', cursor: 'pointer' }}
-            >
-              Request Human Handoff 🚀
-            </button>
+        {activeTab === 'security' && (
+          <div style={{ backgroundColor: '#111827', border: '1px solid #1e293b', padding: '24px', borderRadius: '10px', maxWidth: '500px' }}>
+            <h3 style={{ marginTop: '0', fontSize: '1rem', color: '#38bdf8' }}>Security & PIN Settings</h3>
+            <p style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Session is protected with state-of-the-art verification.</p>
+            <div style={{ marginTop: '16px' }}>
+              <label style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Access PIN (Default: 1234)</label>
+              <input type="password" defaultValue="1234" style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #334155', backgroundColor: '#030712', color: '#fff', outline: 'none' }} />
+            </div>
           </div>
-        </div>
-
+        )}
       </div>
     </main>
   );
