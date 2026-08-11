@@ -1,210 +1,394 @@
 'use client';
+
 import { useState } from 'react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [messages, setMessages] = useState([
-    { sender: 'system', text: 'HammadTech Core AI Agent initialized successfully. Ready for deployment.' }
+    {
+      sender: 'agent',
+      text: 'Hello! I am HammadTech AI Business Agent. How can I help your business today?',
+    },
   ]);
   const [input, setInput] = useState('');
   const [isLocked, setIsLocked] = useState(false);
 
-  const handleSendMessage = (e) => {
+  const sendMessage = (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
-    const userMsg = input;
-    setMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
+
+    const text = input.trim();
+    if (!text) return;
+
+    setMessages((prev) => [
+      ...prev,
+      { sender: 'user', text },
+    ]);
+
     setInput('');
-    
-    // Simulate AI Agent response
+
     setTimeout(() => {
-      setMessages(prev => [...prev, { sender: 'ai', text: `Command processed successfully for HammadTech: "${userMsg}". Executing autonomous pipeline...` }]);
-    }, 1000);
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: 'agent',
+          text: `I received your request: "${text}". The AI business agent interface is working. Connect your AI API/backend to enable real AI responses.`,
+        },
+      ]);
+    }, 700);
   };
 
-  if (isLocked) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 text-white">
-        <div className="bg-slate-900 border border-red-500/30 p-8 rounded-2xl max-w-md w-full text-center shadow-2xl">
-          <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">🔒</div>
-          <h2 className="text-2xl font-bold mb-2">Workstation Locked</h2>
-          <p className="text-slate-400 text-sm mb-6">Security protocol active by Hammad Allah Bakhsh.</p>
-          <button 
-            onClick={() => setIsLocked(false)}
-            className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition duration-200 shadow-lg shadow-red-600/30"
-          >
-            Unlock Session
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const tabs = [
+    { id: 'dashboard', icon: '📊', label: 'Dashboard' },
+    { id: 'agent', icon: '🤖', label: 'Agent Terminal' },
+    { id: 'profile', icon: '⚙️', label: 'Profile' },
+    { id: 'vault', icon: '🛡️', label: 'Security' },
+  ];
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      {/* Top Header */}
-      <header className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-4 py-3 sticky top-0 z-50 flex flex-wrap justify-between items-center gap-4">
-        <div>
-          <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
-            HammadTech <span className="text-slate-300 font-light text-base">Core</span>
-          </h1>
-          <p className="text-xs text-slate-400">Founder: Hammad Allah Bakhsh (@hammadtech55)</p>
+    <main className="min-h-screen bg-slate-950 text-white">
+      {/* Header */}
+      <header className="border-b border-slate-800 bg-slate-950/95">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6">
+          <div>
+            <p className="text-sm font-medium text-cyan-400">
+              HAMMADTECH AI
+            </p>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
+              Business Agent
+            </h1>
+            <p className="mt-1 text-sm text-slate-400">
+              AI-powered business automation platform
+            </p>
+          </div>
+
+          <button
+            onClick={() => setIsLocked(!isLocked)}
+            className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm font-semibold transition hover:border-cyan-500"
+          >
+            {isLocked ? '🔒 Locked' : '🔓 Lock'}
+          </button>
         </div>
-        <button 
-          onClick={() => setIsLocked(true)}
-          className="px-4 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/40 text-red-400 text-xs font-bold rounded-lg transition shadow-sm"
-        >
-          Lock Workstation
-        </button>
       </header>
 
-      {/* Navigation Tabs */}
-      <nav className="bg-slate-900/50 border-b border-slate-800 px-2 flex overflow-x-auto scrollbar-none">
-        {[
-          { id: 'dashboard', label: 'Executive Dashboard', icon: '📊' },
-          { id: 'terminal', label: 'Agent Terminal', icon: '🤖' },
-          { id: 'settings', label: 'Profile Settings', icon: '⚙️' },
-          { id: 'vault', label: 'Security Vault', icon: '🛡️' }
-        ].map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition ${
-              activeTab === tab.id 
-                ? 'border-blue-500 text-blue-400 bg-blue-500/5' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <span>{tab.icon}</span>
-            <span>{tab.label}</span>
-          </button>
-        ))}
+      {/* Navigation */}
+      <nav className="border-b border-slate-800 bg-slate-900/60">
+        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 sm:px-6">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+                activeTab === tab.id
+                  ? 'bg-cyan-500 text-slate-950'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+              }`}
+            >
+              {tab.icon} {tab.label}
+            </button>
+          ))}
+        </div>
       </nav>
 
-      {/* Main Content Area */}
-      <div className="flex-1 p-4 max-w-7xl mx-auto w-full">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+
+        {/* Dashboard */}
         {activeTab === 'dashboard' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 text-blue-500/20 text-4xl font-bold">01</div>
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Active Executions</h3>
-                <p className="text-3xl font-extrabold text-blue-400">1,284</p>
-                <div className="mt-4 text-xs text-emerald-400 flex items-center gap-1">
-                  <span>↑ 12% from last hour</span>
+          <section>
+            <div className="mb-8">
+              <p className="text-sm font-medium text-cyan-400">
+                EXECUTIVE OVERVIEW
+              </p>
+              <h2 className="mt-2 text-3xl font-bold">
+                HammadTech Core
+              </h2>
+              <p className="mt-2 text-slate-400">
+                Monitor your AI business operations from one workspace.
+              </p>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              <StatCard
+                icon="⚡"
+                title="Agent Status"
+                value="ONLINE"
+                description="Business agent is ready"
+              />
+
+              <StatCard
+                icon="🤖"
+                title="AI Mode"
+                value="READY"
+                description="Waiting for your command"
+              />
+
+              <StatCard
+                icon="🛡️"
+                title="Security"
+                value="ACTIVE"
+                description="Protected workspace"
+              />
+            </div>
+
+            <div className="mt-6 grid gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+                <h3 className="text-lg font-bold">
+                  ⚡ Agent Capabilities
+                </h3>
+
+                <div className="mt-5 space-y-3">
+                  <Capability text="Customer support" />
+                  <Capability text="Lead qualification" />
+                  <Capability text="Business enquiries" />
+                  <Capability text="Appointment assistance" />
+                  <Capability text="Sales conversations" />
                 </div>
               </div>
 
-              <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 text-emerald-500/20 text-4xl font-bold">02</div>
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">System Efficiency</h3>
-                <p className="text-3xl font-extrabold text-emerald-400">99.8%</p>
-                <div className="mt-4 text-xs text-slate-400">Optimal performance mode</div>
-              </div>
+              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+                <h3 className="text-lg font-bold">
+                  📋 System Status
+                </h3>
 
-              <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 text-amber-500/20 text-4xl font-bold">03</div>
-                <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Security Level</h3>
-                <p className="text-3xl font-extrabold text-amber-400">Maximum</p>
-                <div className="mt-4 text-xs text-amber-400/80">All firewalls active</div>
+                <div className="mt-5 space-y-4">
+                  <Status label="Frontend" value="Operational" />
+                  <Status label="Agent Interface" value="Operational" />
+                  <Status label="Security Layer" value="Active" />
+                  <Status label="AI API" value="Not Connected" />
+                </div>
+
+                <p className="mt-5 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-xs text-amber-300">
+                  AI API connection is required for real AI conversations.
+                </p>
               </div>
             </div>
+          </section>
+        )}
 
-            <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl">
-              <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                <span>⚡</span> Recent Operations Log
-              </h3>
-              <div className="space-y-3">
-                {[
-                  { task: 'AI Agent Auto-Optimization pipeline executed', time: '2 mins ago', status: 'Success' },
-                  { task: 'Database synchronization with Firebase core', time: '14 mins ago', status: 'Success' },
-                  { task: 'Automated security handshake & threat scan', time: '45 mins ago', status: 'Protected' },
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3 bg-slate-950/50 rounded-xl border border-slate-800/60 text-sm">
-                    <span className="text-slate-300 font-medium">{item.task}</span>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-slate-500">{item.time}</span>
-                      <span className="px-2.5 py-1 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg font-semibold">{item.status}</span>
+        {/* Agent Terminal */}
+        {activeTab === 'agent' && (
+          <section>
+            <div className="mb-6">
+              <p className="text-sm font-medium text-cyan-400">
+                AGENT TERMINAL
+              </p>
+              <h2 className="mt-2 text-3xl font-bold">
+                AI Business Assistant
+              </h2>
+              <p className="mt-2 text-slate-400">
+                Test the agent interface before connecting the production AI backend.
+              </p>
+            </div>
+
+            <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+              <div className="flex items-center justify-between border-b border-slate-800 px-5 py-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500 text-lg text-slate-950">
+                    🤖
+                  </div>
+
+                  <div>
+                    <p className="font-bold">HammadTech AI Agent</p>
+                    <p className="text-xs text-emerald-400">
+                      ● Interface Online
+                    </p>
+                  </div>
+                </div>
+
+                <span className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-400">
+                  DEMO MODE
+                </span>
+              </div>
+
+              <div className="h-[420px] space-y-4 overflow-y-auto p-5">
+                {messages.map((message, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${
+                      message.sender === 'user'
+                        ? 'justify-end'
+                        : 'justify-start'
+                    }`}
+                  >
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm ${
+                        message.sender === 'user'
+                          ? 'bg-cyan-500 text-slate-950'
+                          : 'bg-slate-800 text-slate-200'
+                      }`}
+                    >
+                      {message.text}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
-        )}
 
-        {activeTab === 'terminal' && (
-          <div className="bg-slate-950 border border-slate-800 rounded-2xl flex flex-col h-[70vh] shadow-2xl overflow-hidden">
-            <div className="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
-              <span className="text-xs font-mono text-slate-400">hammadtech@core-terminal:~#</span>
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            </div>
-            
-            <div className="flex-1 p-4 overflow-y-auto space-y-4 font-mono text-sm">
-              {messages.map((m, i) => (
-                <div key={i} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[80%] p-3.5 rounded-xl ${
-                    m.sender === 'user' 
-                      ? 'bg-blue-600 text-white rounded-br-none' 
-                      : 'bg-slate-900 border border-slate-800 text-slate-200 rounded-bl-none'
-                  }`}>
-                    <p className="text-xs text-slate-400 mb-1">{m.sender === 'user' ? 'Hammad' : 'AI Agent'}</p>
-                    <p>{m.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <form onSubmit={handleSendMessage} className="p-3 bg-slate-900 border-t border-slate-800 flex gap-2">
-              <input 
-                type="text" 
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type command or prompt for AI Agent..."
-                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
-              />
-              <button 
-                type="submit"
-                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition shadow-lg shadow-blue-600/20"
+              <form
+                onSubmit={sendMessage}
+                className="border-t border-slate-800 p-4"
               >
-                Execute
-              </button>
-            </form>
-          </div>
+                <div className="flex gap-3">
+                  <input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder="Type a business request..."
+                    className="min-w-0 flex-1 rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm outline-none placeholder:text-slate-500 focus:border-cyan-500"
+                  />
+
+                  <button
+                    type="submit"
+                    className="rounded-xl bg-cyan-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-cyan-400"
+                  >
+                    Send
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
         )}
 
-        {activeTab === 'settings' && (
-          <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl max-w-2xl mx-auto">
-            <h3 className="text-xl font-bold mb-4">Profile & Agency Settings</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Founder Legal Name</label>
-                <input type="text" readOnly value="Hammad Allah Bakhsh" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-300" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Brand Handle</label>
-                <input type="text" readOnly value="@hammadtech55" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-300" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Primary Deployment Node</label>
-                <input type="text" readOnly value="Vercel Edge Network (Asia-South)" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-300" />
+        {/* Profile */}
+        {activeTab === 'profile' && (
+          <section>
+            <div className="mb-6">
+              <p className="text-sm font-medium text-cyan-400">
+                PROFILE SETTINGS
+              </p>
+              <h2 className="mt-2 text-3xl font-bold">
+                Business Profile
+              </h2>
+            </div>
+
+            <div className="max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6">
+              <div className="space-y-5">
+                <Field label="Business Name" value="HammadTech" />
+                <Field label="Brand Handle" value="@hammadtech55" />
+                <Field label="Platform" value="AI Business Agent" />
+                <Field label="Mode" value="Business Automation" />
               </div>
             </div>
-          </div>
+          </section>
         )}
 
+        {/* Security */}
         {activeTab === 'vault' && (
-          <div className="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl shadow-xl text-center max-w-md mx-auto">
-            <div className="text-4xl mb-3">🛡️</div>
-            <h3 className="text-xl font-bold mb-2">Encrypted Security Vault</h3>
-            <p className="text-sm text-slate-400 mb-6">All database keys, OpenAI credentials, and Firebase configurations are secured under AES-256 encryption.</p>
-            <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-mono">
-              Status: Secure & Verified
+          <section>
+            <div className="mb-6">
+              <p className="text-sm font-medium text-cyan-400">
+                SECURITY VAULT
+              </p>
+              <h2 className="mt-2 text-3xl font-bold">
+                Security Center
+              </h2>
             </div>
-          </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              <SecurityCard
+                icon="🛡️"
+                title="Workspace Protection"
+                status="ACTIVE"
+              />
+
+              <SecurityCard
+                icon="🔐"
+                title="Session Lock"
+                status={isLocked ? 'LOCKED' : 'UNLOCKED'}
+              />
+
+              <SecurityCard
+                icon="🔑"
+                title="API Credentials"
+                status="NOT CONFIGURED"
+              />
+
+              <SecurityCard
+                icon="🌐"
+                title="Connection Layer"
+                status="READY"
+              />
+            </div>
+          </section>
         )}
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-800 py-8 text-center">
+        <p className="text-sm text-slate-500">
+          HammadTech AI Business Agent
+        </p>
+        <p className="mt-1 text-xs text-slate-600">
+          @hammadtech55 • Built for business automation
+        </p>
+      </footer>
     </main>
   );
-              }
-        
+}
+
+function StatCard({ icon, title, value, description }) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+      <div className="text-2xl">{icon}</div>
+      <p className="mt-5 text-sm text-slate-400">{title}</p>
+      <p className="mt-1 text-2xl font-bold">{value}</p>
+      <p className="mt-2 text-xs text-slate-500">{description}</p>
+    </div>
+  );
+}
+
+function Capability({ text }) {
+  return (
+    <div className="flex items-center gap-3 rounded-xl bg-slate-950 p-3">
+      <span className="text-emerald-400">✓</span>
+      <span className="text-sm text-slate-300">{text}</span>
+    </div>
+  );
+}
+
+function Status({ label, value }) {
+  return (
+    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <span className="text-sm text-slate-400">{label}</span>
+      <span
+        className={`text-xs font-bold ${
+          value === 'Not Connected'
+            ? 'text-amber-400'
+            : 'text-emerald-400'
+        }`}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function Field({ label, value }) {
+  return (
+    <div>
+      <label className="mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500">
+        {label}
+      </label>
+
+      <div className="rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-200">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function SecurityCard({ icon, title, status }) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+      <div className="flex items-center gap-4">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 text-xl">
+          {icon}
+        </div>
+
+        <div>
+          <h3 className="font-bold">{title}</h3>
+          <p className="mt-1 text-xs text-emerald-400">
+            {status}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+    }
