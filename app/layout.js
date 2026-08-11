@@ -1,5 +1,7 @@
+import './globals.css';
+
 export const metadata = {
-  title: 'HammadTech AI Business Agent',
+  title: 'HammadTech Core',
   description: 'AI-Powered Business Dashboard for HammadTech',
 }
 
